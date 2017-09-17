@@ -31,14 +31,17 @@ public class JparelationshipsTests {
 
         OrderLineItemEntity orderLineItemEntity1 = new OrderLineItemEntity();
         orderLineItemEntity1.setName("Name 1");
+        orderLineItemEntity1.setOrderEntity(orderEntity);
         orderEntity.getOrderLineItemEntities().add(orderLineItemEntity1);
 
         OrderLineItemEntity orderLineItemEntity2 = new OrderLineItemEntity();
         orderLineItemEntity2.setName("Name 2");
+        orderLineItemEntity2.setOrderEntity(orderEntity);
         orderEntity.getOrderLineItemEntities().add(orderLineItemEntity2);
 
         OrderLineItemEntity orderLineItemEntity3 = new OrderLineItemEntity();
         orderLineItemEntity3.setName("Name 3");
+        orderLineItemEntity3.setOrderEntity(orderEntity);
         orderEntity.getOrderLineItemEntities().add(orderLineItemEntity3);
 
         orderRepository.save(orderEntity);
@@ -48,7 +51,10 @@ public class JparelationshipsTests {
         assertNotNull("Name1 is NULL", orderToCheck.getOrderLineItemEntities().get(0).getName());
         assertNotNull("Name2 is NULL", orderToCheck.getOrderLineItemEntities().get(1).getName());
         assertNotNull("Name3 is NULL", orderToCheck.getOrderLineItemEntities().get(2).getName());
-        //assertNotNull("Order is NULL", orderToCheck.getOrderLineItemEntities().get(0).getOrderEntity());
+
+        assertNotNull("Order1 is NULL", orderToCheck.getOrderLineItemEntities().get(0).getOrderEntity());
+        assertNotNull("Order2 is NULL", orderToCheck.getOrderLineItemEntities().get(1).getOrderEntity());
+        assertNotNull("Order3 is NULL", orderToCheck.getOrderLineItemEntities().get(2).getOrderEntity());
     }
 
     @Test
@@ -57,18 +63,20 @@ public class JparelationshipsTests {
         String orderId = UUID.randomUUID().toString();
 
         OrderEntity orderEntity = new OrderEntity(orderId);
-        List<OrderLineItemEntity> orderLineItemEntities = new ArrayList<>();
 
         OrderLineItemEntity orderLineItemEntity1 = new OrderLineItemEntity();
         orderLineItemEntity1.setName("Name 1");
+        orderLineItemEntity1.setOrderEntity(orderEntity);
         orderEntity.getOrderLineItemEntities().add(orderLineItemEntity1);
 
         OrderLineItemEntity orderLineItemEntity2 = new OrderLineItemEntity();
         orderLineItemEntity2.setName("Name 2");
+        orderLineItemEntity2.setOrderEntity(orderEntity);
         orderEntity.getOrderLineItemEntities().add(orderLineItemEntity2);
 
         OrderLineItemEntity orderLineItemEntity3 = new OrderLineItemEntity();
         orderLineItemEntity3.setName("Name 3");
+        orderLineItemEntity3.setOrderEntity(orderEntity);
         orderEntity.getOrderLineItemEntities().add(orderLineItemEntity3);
 
         orderRepository.save(orderEntity);
@@ -81,6 +89,8 @@ public class JparelationshipsTests {
         OrderEntity orderToVerify = orderRepository.findOne(orderId);
         assertEquals("Size mismatch", 2, orderToVerify.getOrderLineItemEntities().size());
         assertTrue(orderToVerify.getOrderLineItemEntities().stream().noneMatch(it -> it.getName().equals("Name2")));
+        assertNotNull("Order1 is NULL", orderToVerify.getOrderLineItemEntities().get(0).getOrderEntity());
+        assertNotNull("Order2 is NULL", orderToVerify.getOrderLineItemEntities().get(1).getOrderEntity());
     }
 
     @Test
@@ -110,10 +120,12 @@ public class JparelationshipsTests {
 
         OrderLineItemEntity orderLineItemEntityR1 = new OrderLineItemEntity();
         orderLineItemEntityR1.setName("Name R1");
+        orderLineItemEntityR1.setOrderEntity(orderToChange);
         replacement.add(orderLineItemEntityR1);
 
         OrderLineItemEntity orderLineItemEntityR2 = new OrderLineItemEntity();
         orderLineItemEntityR2.setName("Name R2");
+        orderLineItemEntityR2.setOrderEntity(orderToChange);
         replacement.add(orderLineItemEntityR2);
 
         orderToChange.setOrderLineItemEntities(replacement);
@@ -124,6 +136,9 @@ public class JparelationshipsTests {
         assertTrue(orderToVerify.getOrderLineItemEntities().stream().noneMatch(it -> it.getName().equals("Name1")));
         assertTrue(orderToVerify.getOrderLineItemEntities().stream().noneMatch(it -> it.getName().equals("Name2")));
         assertTrue(orderToVerify.getOrderLineItemEntities().stream().noneMatch(it -> it.getName().equals("Name3")));
+
+        assertNotNull("Order1 is NULL", orderToVerify.getOrderLineItemEntities().get(0).getOrderEntity());
+        assertNotNull("Order2 is NULL", orderToVerify.getOrderLineItemEntities().get(1).getOrderEntity());
     }
 
 }

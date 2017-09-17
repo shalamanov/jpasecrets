@@ -1,5 +1,8 @@
 package com.wtf.jparelationships.order;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.criterion.Order;
+
 import javax.persistence.*;
 
 @Entity
@@ -9,6 +12,10 @@ public class OrderLineItemEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @ManyToOne(cascade = CascadeType.ALL, targetEntity = OrderEntity.class)
+    @JoinColumn(name = "order_id", insertable = false, updatable = false)
+    private OrderEntity orderEntity;
 
     private String name;
 
@@ -28,6 +35,14 @@ public class OrderLineItemEntity {
         this.name = name;
     }
 
+    public OrderEntity getOrderEntity() {
+        return orderEntity;
+    }
+
+    public void setOrderEntity(OrderEntity orderEntity) {
+        this.orderEntity = orderEntity;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -41,7 +56,9 @@ public class OrderLineItemEntity {
     @Override
     public int hashCode() {
         int result = id;
+        result = 31 * result + (orderEntity != null ? orderEntity.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
         return result;
     }
+
 }
