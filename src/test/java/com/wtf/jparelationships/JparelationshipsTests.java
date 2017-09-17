@@ -84,6 +84,8 @@ public class JparelationshipsTests {
 
         OrderEntity orderToVerify = orderRepository.findOne(orderId);
         assertEquals("Size mismatch", 2, orderToVerify.getOrderLineItemEntities().size());
+        assertEquals("order mismatch", orderToVerify, orderToVerify.getOrderLineItemEntities().get(0).getOrderEntity());
+        assertEquals("order mismatch", orderToVerify, orderToVerify.getOrderLineItemEntities().get(1).getOrderEntity());
         assertTrue(orderToVerify.getOrderLineItemEntities().stream().noneMatch(it -> it.getName().equals("Name2")));
     }
 
